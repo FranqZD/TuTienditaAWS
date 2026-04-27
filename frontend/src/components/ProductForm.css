@@ -1,0 +1,139 @@
+.product-form {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+
+.product-form-title {
+  font-family: var(--heading);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0 0 16px;
+}
+
+.product-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.product-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.product-form-group input,
+.product-form-group textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: var(--sans);
+  color: var(--text-h);
+  background: var(--bg);
+  transition: border-color 0.2s;
+}
+
+.product-form-group input:focus,
+.product-form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.product-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.product-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.product-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.product-form-submit {
+  padding: 10px 24px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.product-form-submit:hover {
+  opacity: 0.9;
+}
+
+.product-form-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.product-form-cancel {
+  padding: 10px 24px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.product-form-cancel:hover {
+  background: var(--code-bg);
+  color: var(--text-h);
+}
+
+.product-form-error {
+  padding: 10px 14px;
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.product-form-error ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.product-form-error li {
+  margin-bottom: 2px;
+}
+
+@media (max-width: 480px) {
+  .product-form {
+    padding: 16px;
+  }
+
+  .product-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .product-form-actions {
+    flex-direction: column;
+  }
+}

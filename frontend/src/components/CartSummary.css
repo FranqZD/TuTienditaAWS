@@ -1,0 +1,27 @@
+.cart-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 2px solid var(--border);
+  margin-top: 8px;
+}
+
+.cart-summary-label {
+  font-family: var(--heading);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.cart-summary-total {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+@media (max-width: 480px) {
+  .cart-summary-total {
+    font-size: 20px;
+  }
+}

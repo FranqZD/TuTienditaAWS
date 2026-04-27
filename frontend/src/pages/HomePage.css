@@ -1,0 +1,34 @@
+.home-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.home-loading,
+.home-error {
+  text-align: center;
+  padding: 48px 16px;
+}
+
+.home-loading p {
+  font-size: 18px;
+  color: var(--text);
+}
+
+.home-error p {
+  font-size: 16px;
+  color: #e74c3c;
+}
+
+.home-empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--text);
+}
+
+@media (max-width: 639px) {
+  .home-products-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

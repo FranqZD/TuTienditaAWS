@@ -1,0 +1,42 @@
+/* ==========================================================================
+   AdminLayout — Layout del panel de administración (sidebar + contenido)
+   Sin Navbar ni Footer públicos.
+   ========================================================================== */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+/* --- Área de contenido principal --- */
+
+.admin-content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   Responsive — Tablet (< 1024px)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  .admin-content {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ==========================================================================
+   Responsive — Mobile (< 768px)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-content {
+    padding: var(--spacing-md);
+  }
+}

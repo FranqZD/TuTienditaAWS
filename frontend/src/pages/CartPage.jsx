@@ -1,81 +1,105 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { checkout } from '../services/api';
-import CartItem from '../components/CartItem';
-import CartSummary from '../components/CartSummary';
+import CartItem from '../components/cart/CartItem';
+import CartSummary from '../components/cart/CartSummary';
+import CheckoutConfirmation from '../components/cart/CheckoutConfirmation';
+import EmptyState from '../components/ui/EmptyState';
+import ErrorMessage from '../components/ui/ErrorMessage';
 import './CartPage.css';
 
 function CartPage() {
   const { items, clearCart } = useCart();
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
-  const [checkoutSuccess, setCheckoutSuccess] = useState(false);
+  const [orderConfirmation, setOrderConfirmation] = useState(null);
 
-  const isEmpty = items.length === 0;
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   async function handleCheckout() {
-    setCheckoutLoading(true);
+    setIsLoading(true);
     setCheckoutError(null);
-    setCheckoutSuccess(false);
 
     try {
       const cartItems = items.map(({ productId, quantity }) => ({
         productId,
         quantity,
       }));
-      await checkout(cartItems);
+      const result = await checkout(cartItems);
       clearCart();
-      setCheckoutSuccess(true);
+      setOrderConfirmation(result);
     } catch (err) {
-      setCheckoutError(err.message || 'Error al procesar la compra');
+      if (err.status === 400 && err.data?.stockErrors) {
+        const stockMessages = err.data.stockErrors
+          .map(
+            (e) =>
+              `${e.name || e.productId}: stock insuficiente (disponible: ${e.available ?? 0})`
+          )
+          .join('. ');
+        setCheckoutError(stockMessages);
+      } else {
+        setCheckoutError(
+          'Error al procesar la compra. Intenta de nuevo.'
+        );
+      }
     } finally {
-      setCheckoutLoading(false);
+      setIsLoading(false);
     }
   }
 
-  return (
-    <main>
-      <h1 className="cart-page-title">Carrito de Compras</h1>
+  if (orderConfirmation) {
+    return (
+      <main className="cart-page">
+        <h1 className="cart-page__title">Carrito de Compras</h1>
+        <CheckoutConfirmation order={orderConfirmation} />
+      </main>
+    );
+  }
 
-      {checkoutSuccess && (
-        <div className="cart-message cart-message--success" role="status">
-          ¡Compra realizada con éxito! Gracias por tu compra.
-        </div>
-      )}
+  if (items.length === 0) {
+    return (
+      <main className="cart-page">
+        <h1 className="cart-page__title">Carrito de Compras</h1>
+        <EmptyState
+          title="Tu carrito está vacío"
+          message="Agrega productos desde el catálogo para comenzar tu compra."
+          actionLabel="Ir al catálogo"
+          actionTo="/catalogo"
+        />
+      </main>
+    );
+  }
+
+  return (
+    <main className="cart-page">
+      <h1 className="cart-page__title">Carrito de Compras</h1>
 
       {checkoutError && (
-        <div className="cart-message cart-message--error" role="alert">
-          {checkoutError}
-        </div>
+        <ErrorMessage message={checkoutError} />
       )}
 
-      {isEmpty && !checkoutSuccess ? (
-        <div className="cart-empty">
-          <p>Tu carrito está vacío.</p>
-          <Link to="/" className="cart-empty-link">Ver productos</Link>
-        </div>
-      ) : (
-        <>
-          {items.length > 0 && (
-            <>
-              <ul className="cart-items-list">
-                {items.map((item) => (
-                  <CartItem key={item.productId} item={item} />
-                ))}
-              </ul>
-              <CartSummary />
-              <button
-                className="cart-checkout-btn"
-                onClick={handleCheckout}
-                disabled={isEmpty || checkoutLoading}
-              >
-                {checkoutLoading ? 'Procesando…' : 'Finalizar compra'}
-              </button>
-            </>
-          )}
-        </>
-      )}
+      <div className="cart-page__content">
+        <section className="cart-page__items">
+          <ul className="cart-page__items-list">
+            {items.map((item) => (
+              <CartItem key={item.productId} item={item} />
+            ))}
+          </ul>
+        </section>
+
+        <aside className="cart-page__sidebar">
+          <CartSummary
+            subtotal={subtotal}
+            totalItems={totalItems}
+            onCheckout={handleCheckout}
+            isLoading={isLoading}
+          />
+        </aside>
+      </div>
     </main>
   );
 }

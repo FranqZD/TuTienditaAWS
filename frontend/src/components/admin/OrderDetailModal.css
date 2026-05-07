@@ -1,0 +1,209 @@
+/* ==========================================================================
+   OrderDetailModal — Modal de detalle de orden
+   ========================================================================== */
+
+/* Overlay */
+.order-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: var(--spacing-md);
+}
+
+/* Modal card */
+.order-modal {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: order-modal-enter 0.2s ease-out;
+}
+
+@keyframes order-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.order-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.order-modal__title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.order-modal__close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.order-modal__close-btn:hover {
+  background-color: #f3f4f6;
+  color: var(--color-text);
+}
+
+/* Body */
+.order-modal__body {
+  padding: var(--spacing-lg);
+}
+
+/* Info rows */
+.order-modal__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.order-modal__info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-modal__label {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.order-modal__value {
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.order-modal__value--id {
+  font-family: monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  word-break: break-all;
+  text-align: right;
+  max-width: 60%;
+}
+
+/* Items section */
+.order-modal__items {
+  margin-bottom: var(--spacing-lg);
+}
+
+.order-modal__items-title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.order-modal__items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.order-modal__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: #f9fafb;
+  border-radius: var(--radius-sm);
+}
+
+.order-modal__item-name {
+  flex: 1;
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+.order-modal__item-qty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  min-width: 30px;
+  text-align: center;
+}
+
+.order-modal__item-price {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text);
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Divider */
+.order-modal__divider {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Total */
+.order-modal__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-modal__total-label {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.order-modal__total-value {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .order-modal {
+    max-width: 100%;
+    max-height: 85vh;
+  }
+
+  .order-modal__value--id {
+    font-size: var(--font-size-sm);
+    max-width: 50%;
+  }
+}

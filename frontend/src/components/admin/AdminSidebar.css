@@ -1,0 +1,137 @@
+/* ==========================================================================
+   AdminSidebar — Barra lateral de navegación del panel de administración
+   ========================================================================== */
+
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  min-height: 100vh;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  padding: var(--spacing-lg) 0;
+}
+
+/* --- Header --- */
+
+.admin-sidebar-header {
+  padding: 0 var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.admin-sidebar-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* --- Navigation --- */
+
+.admin-sidebar-nav {
+  flex: 1;
+}
+
+.admin-sidebar-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+/* --- Links --- */
+
+.admin-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.admin-sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Active link — NavLink adds .active class automatically */
+.admin-sidebar-link.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-left-color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* --- Icons --- */
+
+.admin-sidebar-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Responsive — Tablet and smaller (< 1024px)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  .admin-sidebar {
+    width: 220px;
+    padding: var(--spacing-md) 0;
+  }
+
+  .admin-sidebar-header {
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .admin-sidebar-link {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-sidebar {
+    width: 100%;
+    min-height: auto;
+    flex-direction: column;
+    padding: var(--spacing-md) 0;
+  }
+
+  .admin-sidebar-header {
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .admin-sidebar-links {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0;
+    padding: 0 var(--spacing-sm);
+  }
+
+  .admin-sidebar-link {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .admin-sidebar-link.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--color-accent);
+  }
+}

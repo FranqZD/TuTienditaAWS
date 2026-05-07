@@ -61,3 +61,7 @@ export function checkout(cartItems) {
     body: JSON.stringify({ items: cartItems }),
   });
 }
+
+export function getOrders() {
+  return request('/api/orders');
+}

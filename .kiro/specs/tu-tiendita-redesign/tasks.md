@@ -1,0 +1,245 @@
+# Plan de Implementación: Rediseño Tu Tiendita
+
+## Resumen
+
+Transformar "Tu Tiendita" de un proyecto académico funcional a una tienda en línea con apariencia profesional. Se implementa de forma incremental: primero el backend mínimo (endpoint de órdenes), luego la base visual (CSS global y componentes reutilizables), después los layouts, páginas públicas, y finalmente el panel de administración. Cada paso construye sobre el anterior sin dejar código huérfano.
+
+## Tareas
+
+- [x] 1. Backend: Implementar endpoint GET /api/orders
+  - [x] 1.1 Agregar función getAllOrders en orderService.js
+    - Implementar Scan sobre ORDERS_TABLE_NAME usando docClient existente
+    - Mapear cada orden para incluir campo `itemCount` (longitud del array items)
+    - Ordenar resultados por `createdAt` descendente
+    - _Requerimientos: 8.1, 8.2, 8.4_
+  - [x] 1.2 Agregar controlador getOrders en orderController.js
+    - Implementar handler async que llame a orderService.getAllOrders()
+    - Retornar 200 con array JSON en caso de éxito
+    - Retornar 500 con mensaje descriptivo en caso de error de DynamoDB
+    - _Requerimientos: 8.1, 8.3_
+  - [x] 1.3 Registrar ruta GET / en orderRoutes.js
+    - Agregar `router.get('/', orderController.getOrders)` sin modificar la ruta POST /checkout existente
+    - _Requerimientos: 8.5_
+  - [ ]* 1.4 Escribir test de propiedad para el endpoint de órdenes
+    - **Propiedad 9: Endpoint de órdenes retorna datos completos y ordenados**
+    - Generar arrays de órdenes con fechas aleatorias, verificar que el resultado esté ordenado por createdAt desc y contenga todos los campos requeridos (orderId, createdAt, total, status, itemCount)
+    - **Valida: Requerimientos 7.1, 7.2, 8.2**
+
+- [x] 2. Checkpoint — Verificar backend
+  - Asegurar que todos los tests pasan, preguntar al usuario si surgen dudas.
+
+- [x] 3. Frontend: Variables CSS globales y reset
+  - [x] 3.1 Reescribir frontend/src/index.css con variables CSS globales y reset
+    - Definir paleta de colores: --color-bg (#f5f5f5), --color-surface (#ffffff), --color-primary (azul oscuro), --color-accent (verde/azul para acciones), --color-error (rojo), --color-text, --color-text-secondary
+    - Definir variables de tipografía: --font-family, --font-size-sm/md/lg/xl/2xl
+    - Definir variables de espaciado: --spacing-xs/sm/md/lg/xl
+    - Definir variables de bordes y sombras: --radius-sm/md/lg, --shadow-sm/md/lg
+    - Definir breakpoints como comentarios de referencia: 768px (tablet), 1024px (desktop)
+    - Incluir reset básico (box-sizing, margin, padding) y estilos base de body
+    - _Requerimientos: 9.1, 9.2, 9.4_
+
+- [x] 4. Frontend: Componentes UI reutilizables
+  - [x] 4.1 Crear componente LoadingSpinner
+    - Crear frontend/src/components/ui/LoadingSpinner.jsx con prop `message` (default "Cargando...")
+    - Crear frontend/src/components/ui/LoadingSpinner.css con animación de spinner
+    - Incluir role="status" y aria-live="polite" para accesibilidad
+    - _Requerimientos: 9.6, 2.3_
+  - [x] 4.2 Crear componente ErrorMessage
+    - Crear frontend/src/components/ui/ErrorMessage.jsx con props `message` y `onRetry` opcional
+    - Crear frontend/src/components/ui/ErrorMessage.css con estilo de alerta roja
+    - Incluir role="alert", botón "Reintentar" visible solo si onRetry está definido
+    - _Requerimientos: 9.6, 2.4_
+  - [x] 4.3 Crear componente EmptyState
+    - Crear frontend/src/components/ui/EmptyState.jsx con props `title`, `message`, `actionLabel`, `actionTo`
+    - Crear frontend/src/components/ui/EmptyState.css con estilo centrado y espaciado
+    - Incluir icono SVG ilustrativo y enlace opcional usando Link de react-router-dom
+    - _Requerimientos: 9.6, 2.5_
+
+- [x] 5. Frontend: Layout público (Layout, Navbar, Footer)
+  - [x] 5.1 Crear componente Footer
+    - Crear frontend/src/components/layout/Footer.jsx con nombre de tienda, copyright 2025 y enlaces secundarios (Inicio, Catálogo)
+    - Crear frontend/src/components/layout/Footer.css con estilo de footer profesional
+    - _Requerimientos: 1.4_
+  - [x] 5.2 Rediseñar componente Navbar
+    - Mover a frontend/src/components/layout/Navbar.jsx (reemplazar el actual)
+    - Crear frontend/src/components/layout/Navbar.css con nuevo diseño
+    - Mostrar logo "Tu Tiendita", enlaces (Inicio, Catálogo, Carrito con badge numérico usando useCart)
+    - Implementar menú hamburguesa con estado `menuOpen` para pantallas < 768px
+    - Aplicar position: sticky en la parte superior
+    - _Requerimientos: 1.2, 1.3, 1.5_
+  - [x] 5.3 Crear componente Layout
+    - Crear frontend/src/components/layout/Layout.jsx que envuelva children con Navbar + main + Footer
+    - Crear frontend/src/components/layout/Layout.css con min-height para empujar footer al fondo
+    - _Requerimientos: 1.1, 1.5_
+
+- [x] 6. Frontend: Página de Inicio (HomePage) con HeroSection
+  - [x] 6.1 Crear componente HeroSection
+    - Crear frontend/src/components/home/HeroSection.jsx con título de bienvenida, descripción breve y botón CTA "Ver Catálogo" que enlace a /catalogo
+    - Crear frontend/src/components/home/HeroSection.css con fondo degradado, tipografía grande y diseño responsive
+    - _Requerimientos: 2.1_
+  - [x] 6.2 Rediseñar HomePage
+    - Reescribir frontend/src/pages/HomePage.jsx para incluir HeroSection + sección de productos destacados (máximo 8)
+    - Reescribir frontend/src/pages/HomePage.css con diseño profesional
+    - Usar LoadingSpinner, ErrorMessage y EmptyState para los estados de carga/error/vacío
+    - Limitar productos mostrados a 8 con `.slice(0, 8)`
+    - _Requerimientos: 2.1, 2.2, 2.3, 2.4, 2.5_
+  - [ ]* 6.3 Escribir test de propiedad para límite de productos en HomePage
+    - **Propiedad 1: Límite de productos destacados en HomePage**
+    - Generar arrays de productos de longitud 0-50, verificar que la función de slice retorna máximo 8 elementos y todos los elementos del resultado pertenecen al array original
+    - **Valida: Requerimiento 2.2**
+
+- [x] 7. Frontend: Catálogo de Productos (CatalogPage)
+  - [x] 7.1 Rediseñar componente ProductCard
+    - Mover a frontend/src/components/catalog/ProductCard.jsx (reemplazar el actual)
+    - Crear frontend/src/components/catalog/ProductCard.css con diseño de tarjeta profesional
+    - Mostrar: imagen, nombre, descripción truncada a 2 líneas (CSS line-clamp), precio en MXN, indicador de stock, botón agregar al carrito
+    - Implementar badges: "Agotado" (stock === 0, botón deshabilitado), "Últimas unidades" (stock 1-5)
+    - Aplicar transiciones suaves en hover
+    - _Requerimientos: 3.1, 3.2, 3.3, 9.5_
+  - [ ]* 7.2 Escribir tests de propiedad para ProductCard
+    - **Propiedad 2: ProductCard muestra todos los campos requeridos**
+    - Generar productos con campos aleatorios válidos, verificar que todos los campos se renderizan
+    - **Propiedad 3: Etiqueta de stock bajo en ProductCard**
+    - Generar productos con stock 0-100, verificar lógica de badges según rangos
+    - **Valida: Requerimientos 3.1, 3.2, 3.3**
+  - [x] 7.3 Crear componente CatalogFilters
+    - Crear frontend/src/components/catalog/CatalogFilters.jsx con select de categoría y select de ordenamiento (precio asc, precio desc, nombre)
+    - Crear frontend/src/components/catalog/CatalogFilters.css con diseño inline responsive
+    - Props: categories, selectedCategory, sortBy, onCategoryChange, onSortChange
+    - _Requerimientos: 3.5, 3.6_
+  - [x] 7.4 Crear página CatalogPage
+    - Crear frontend/src/pages/CatalogPage.jsx con carga de productos, filtrado por categoría, ordenamiento y grid responsive
+    - Crear frontend/src/pages/CatalogPage.css con grid: 4 columnas desktop, 2 tablet, 1 móvil
+    - Extraer categorías únicas de los productos para pasarlas a CatalogFilters
+    - Implementar lógica de filtrado y ordenamiento como funciones puras
+    - Usar LoadingSpinner, ErrorMessage y EmptyState
+    - _Requerimientos: 3.4, 3.5, 3.6, 2.3, 2.4, 2.5_
+  - [ ]* 7.5 Escribir tests de propiedad para filtrado y ordenamiento
+    - **Propiedad 4: Filtro de categoría retorna solo productos coincidentes**
+    - Generar listas de productos con categorías aleatorias, verificar que el filtro retorna solo coincidencias exactas
+    - **Propiedad 5: Ordenamiento de productos es correcto**
+    - Generar listas de productos con precios/nombres aleatorios, verificar invariantes de orden
+    - **Valida: Requerimientos 3.5, 3.6**
+
+- [x] 8. Checkpoint — Verificar páginas públicas base
+  - Asegurar que todos los tests pasan, preguntar al usuario si surgen dudas.
+
+- [x] 9. Frontend: Carrito rediseñado (CartPage)
+  - [x] 9.1 Rediseñar componente CartItem
+    - Mover a frontend/src/components/cart/CartItem.jsx (reemplazar el actual)
+    - Crear frontend/src/components/cart/CartItem.css con diseño profesional
+    - Mostrar: imagen, nombre, precio unitario, controles ± (incrementar/decrementar), subtotal por producto, botón eliminar
+    - _Requerimientos: 4.1_
+  - [x] 9.2 Rediseñar componente CartSummary
+    - Mover a frontend/src/components/cart/CartSummary.jsx (reemplazar el actual)
+    - Crear frontend/src/components/cart/CartSummary.css con diseño de resumen
+    - Mostrar: subtotal total, cantidad total de productos, botón "Finalizar compra"
+    - _Requerimientos: 4.2_
+  - [x] 9.3 Crear componente CheckoutConfirmation
+    - Crear frontend/src/components/cart/CheckoutConfirmation.jsx con props `order` (orderId, createdAt, items, total)
+    - Crear frontend/src/components/cart/CheckoutConfirmation.css con diseño de confirmación exitosa
+    - Mostrar: número de orden, fecha formateada, lista de productos comprados con cantidad y precio, total pagado
+    - _Requerimientos: 4.5_
+  - [x] 9.4 Rediseñar CartPage completa
+    - Reescribir frontend/src/pages/CartPage.jsx integrando CartItem, CartSummary y CheckoutConfirmation
+    - Reescribir frontend/src/pages/CartPage.css con diseño profesional
+    - Implementar: estado vacío con EmptyState (enlace a /catalogo), deshabilitar botón durante checkout, mostrar confirmación tras éxito, manejar errores de stock vs errores genéricos, preservar carrito en caso de error
+    - Limpiar carrito SOLO después de checkout exitoso
+    - _Requerimientos: 4.3, 4.4, 4.5, 4.6, 4.7, 4.8_
+  - [ ]* 9.5 Escribir test de propiedad para cálculo de subtotal del carrito
+    - **Propiedad 6: Cálculo correcto del subtotal del carrito**
+    - Generar items con precios y cantidades aleatorios, verificar que subtotal === suma de (precio × cantidad) y cantidad total === suma de cantidades
+    - **Valida: Requerimiento 4.2**
+
+- [x] 10. Frontend: Panel de Administración
+  - [x] 10.1 Crear componente AdminSidebar
+    - Crear frontend/src/components/admin/AdminSidebar.jsx con NavLink a: Dashboard (/admin), Productos (/admin/productos), Nuevo Producto (/admin/nuevo), Órdenes (/admin/ordenes)
+    - Crear frontend/src/components/admin/AdminSidebar.css con estilo de sidebar vertical, enlace activo resaltado
+    - _Requerimientos: 6.1, 6.5_
+  - [x] 10.2 Crear componente AdminLayout
+    - Crear frontend/src/components/admin/AdminLayout.jsx con sidebar + área de contenido (Outlet de react-router-dom)
+    - Crear frontend/src/components/admin/AdminLayout.css con layout diferenciado del público (sin Navbar/Footer públicos)
+    - _Requerimientos: 6.5, 6.6_
+  - [x] 10.3 Crear componente DashboardCards
+    - Crear frontend/src/components/admin/DashboardCards.jsx con props `metrics` (totalProducts, activeProducts, lowStockProducts, totalOrders)
+    - Crear frontend/src/components/admin/DashboardCards.css con grid de tarjetas de métricas
+    - _Requerimientos: 6.2_
+  - [x] 10.4 Crear página DashboardPage
+    - Crear frontend/src/pages/admin/DashboardPage.jsx que obtenga productos y órdenes, calcule métricas localmente y renderice DashboardCards
+    - Crear frontend/src/pages/admin/DashboardPage.css
+    - Calcular: totalProducts, activeProducts (active !== false), lowStockProducts (stock > 0 && stock <= 5), totalOrders
+    - Usar LoadingSpinner y ErrorMessage para estados de carga/error
+    - _Requerimientos: 6.2, 6.3, 6.4_
+  - [ ]* 10.5 Escribir test de propiedad para métricas del Dashboard
+    - **Propiedad 8: Cálculo correcto de métricas del Dashboard**
+    - Generar arrays de productos con stock y active aleatorios, verificar que las métricas calculadas cumplen las fórmulas definidas
+    - **Valida: Requerimiento 6.2**
+  - [x] 10.6 Crear página ProductsPage (tabla de productos admin)
+    - Crear frontend/src/pages/admin/ProductsPage.jsx con tabla de productos existente (migrar lógica de AdminPage actual), botones editar/eliminar, botón crear nuevo
+    - Crear frontend/src/pages/admin/ProductsPage.css con estilo de tabla profesional
+    - _Requerimientos: 6.1_
+  - [x] 10.7 Crear página NewProductPage con formulario mejorado
+    - Crear frontend/src/pages/admin/NewProductPage.jsx que use un ProductForm mejorado
+    - Crear frontend/src/pages/admin/NewProductPage.css
+    - Mover ProductForm a frontend/src/components/admin/ProductForm.jsx y agregar campos: categoría, estado activo/inactivo, vista previa de imagen
+    - Implementar validación por campo con mensajes de error específicos debajo de cada campo en rojo
+    - Mostrar mensaje de éxito verde tras envío exitoso y limpiar formulario
+    - _Requerimientos: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
+  - [ ]* 10.8 Escribir test de propiedad para validación del formulario
+    - **Propiedad 7: Validación del formulario de productos**
+    - Generar datos de formulario válidos e inválidos, verificar que la función de validación rechaza datos inválidos y acepta datos válidos según las reglas definidas
+    - **Valida: Requerimiento 5.2**
+  - [x] 10.9 Crear componente OrdersTable
+    - Crear frontend/src/components/admin/OrdersTable.jsx con props `orders` y `onViewDetail`
+    - Crear frontend/src/components/admin/OrdersTable.css con estilo de tabla profesional
+    - Columnas: ID de orden (truncado), fecha formateada, total en MXN, estado con badge, cantidad de productos, botón "Ver detalle"
+    - _Requerimientos: 7.3_
+  - [ ]* 10.10 Escribir test de propiedad para OrdersTable
+    - **Propiedad 10: Tabla de órdenes renderiza todas las columnas**
+    - Generar órdenes con campos aleatorios válidos, verificar que todas las columnas requeridas se renderizan
+    - **Valida: Requerimiento 7.3**
+  - [x] 10.11 Crear componente OrderDetailModal
+    - Crear frontend/src/components/admin/OrderDetailModal.jsx con props `order` y `onClose`
+    - Crear frontend/src/components/admin/OrderDetailModal.css con overlay y modal centrado
+    - Mostrar: orderId, fecha, lista de items (nombre, cantidad, precio), total
+    - Cerrar con botón X o click en overlay
+    - _Requerimientos: 7.4_
+  - [x] 10.12 Crear página OrdersPage
+    - Crear frontend/src/pages/admin/OrdersPage.jsx que obtenga órdenes de getOrders(), renderice OrdersTable y OrderDetailModal
+    - Crear frontend/src/pages/admin/OrdersPage.css
+    - Usar LoadingSpinner, ErrorMessage y EmptyState para estados
+    - _Requerimientos: 7.5, 7.6, 7.7_
+
+- [x] 11. Checkpoint — Verificar panel de administración
+  - Asegurar que todos los tests pasan, preguntar al usuario si surgen dudas.
+
+- [x] 12. Frontend: Extensión de api.js y enrutamiento final
+  - [x] 12.1 Agregar función getOrders() en api.js
+    - Agregar `export function getOrders() { return request('/api/orders'); }` en frontend/src/services/api.js
+    - _Requerimientos: 10.2, 7.1_
+  - [x] 12.2 Actualizar App.jsx con nuevas rutas y layouts
+    - Importar Layout y AdminLayout
+    - Configurar rutas públicas envueltas en Layout: / (HomePage), /catalogo (CatalogPage), /products/:id (ProductDetailPage), /cart (CartPage)
+    - Configurar rutas admin con AdminLayout y rutas anidadas: /admin (DashboardPage index), /admin/productos (ProductsPage), /admin/nuevo (NewProductPage), /admin/ordenes (OrdersPage)
+    - Eliminar el Navbar suelto actual del App.jsx
+    - Actualizar frontend/src/App.css si es necesario
+    - _Requerimientos: 1.1, 6.6, 10.6_
+  - [x] 12.3 Limpiar archivos obsoletos
+    - Eliminar frontend/src/components/Navbar.jsx y Navbar.css originales (reemplazados por layout/)
+    - Eliminar frontend/src/pages/AdminPage.jsx y AdminPage.css (reemplazados por admin/)
+    - Verificar que no quedan imports rotos
+    - _Requerimientos: 10.6_
+
+- [x] 13. Checkpoint final — Verificar integración completa
+  - Ejecutar `npm run build` en frontend para verificar que compila correctamente como archivos estáticos
+  - Asegurar que todos los tests pasan, preguntar al usuario si surgen dudas.
+
+## Notas
+
+- Las tareas marcadas con `*` son opcionales y pueden omitirse para un MVP más rápido
+- Cada tarea referencia requerimientos específicos para trazabilidad
+- Los checkpoints aseguran validación incremental
+- Los tests de propiedades validan propiedades universales de correctitud definidas en el diseño
+- Los tests unitarios validan ejemplos específicos y casos borde
+- Se usa JavaScript/JSX como lenguaje de implementación (consistente con el proyecto existente)
+- fast-check ya está instalado en backend; debe agregarse como devDependency en frontend junto con vitest para los tests

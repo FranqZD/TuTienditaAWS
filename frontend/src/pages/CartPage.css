@@ -1,79 +1,45 @@
-.cart-page-title {
-  margin-bottom: 24px;
+/* ==========================================================================
+   CartPage — Página del carrito de compras
+   ========================================================================== */
+
+.cart-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md);
 }
 
-.cart-empty {
-  text-align: center;
-  padding: 48px 16px;
+.cart-page__title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
 }
 
-.cart-empty p {
-  font-size: 16px;
-  color: var(--text);
-  margin-bottom: 24px;
+/* Layout: items a la izquierda, resumen a la derecha */
+.cart-page__content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
 }
 
-.cart-empty-link {
-  display: inline-block;
-  padding: 10px 24px;
-  background: var(--accent);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 500;
-  transition: opacity 0.2s;
+@media (min-width: 768px) {
+  .cart-page__content {
+    grid-template-columns: 1fr 340px;
+    align-items: start;
+  }
 }
 
-.cart-empty-link:hover {
-  opacity: 0.9;
-}
-
-.cart-items-list {
+/* Items list */
+.cart-page__items-list {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
-.cart-checkout-btn {
-  width: 100%;
-  padding: 14px 24px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  margin-top: 16px;
-}
-
-.cart-checkout-btn:hover {
-  opacity: 0.9;
-}
-
-.cart-checkout-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.cart-message {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 15px;
-  margin-top: 16px;
-  text-align: center;
-}
-
-.cart-message--success {
-  background: rgba(39, 174, 96, 0.1);
-  color: #27ae60;
-  border: 1px solid rgba(39, 174, 96, 0.3);
-}
-
-.cart-message--error {
-  background: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
-  border: 1px solid rgba(231, 76, 60, 0.3);
+/* Sidebar (summary) */
+.cart-page__sidebar {
+  position: sticky;
+  top: calc(var(--spacing-xl) + 60px);
 }

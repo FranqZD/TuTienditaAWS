@@ -1,0 +1,16 @@
+.new-product-page {
+  max-width: 640px;
+}
+
+.new-product-page__heading {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.new-product-page__description {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-xl);
+}

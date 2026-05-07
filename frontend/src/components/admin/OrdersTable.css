@@ -1,0 +1,148 @@
+/* ==========================================================================
+   OrdersTable — Tabla de órdenes del panel de administración
+   ========================================================================== */
+
+/* Table wrapper */
+.orders-table__wrapper {
+  overflow-x: auto;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Table */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-md);
+}
+
+.orders-table th,
+.orders-table td {
+  text-align: left;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.orders-table th {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-secondary);
+  background-color: #f9fafb;
+}
+
+.orders-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.orders-table tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.orders-table tbody tr:hover {
+  background-color: #f0f9f7;
+}
+
+/* Order ID */
+.orders-table__order-id {
+  font-family: monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  cursor: default;
+}
+
+/* Total */
+.orders-table__total {
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* Badge */
+.orders-table__badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.orders-table__badge--completed {
+  background-color: rgba(42, 157, 143, 0.12);
+  color: #2a9d8f;
+}
+
+.orders-table__badge--other {
+  background-color: rgba(107, 114, 128, 0.12);
+  color: var(--color-text-secondary);
+}
+
+/* Detail button */
+.orders-table__detail-btn {
+  padding: 6px 14px;
+  border: 1px solid rgba(42, 157, 143, 0.3);
+  border-radius: var(--radius-sm);
+  background-color: rgba(42, 157, 143, 0.1);
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.orders-table__detail-btn:hover {
+  opacity: 0.8;
+}
+
+.orders-table__detail-btn:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Responsive: card layout on small screens
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .orders-table thead {
+    display: none;
+  }
+
+  .orders-table,
+  .orders-table tbody,
+  .orders-table tr,
+  .orders-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .orders-table tr {
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-surface);
+  }
+
+  .orders-table td {
+    border: none;
+    padding: var(--spacing-xs) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .orders-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    min-width: 80px;
+  }
+
+  .orders-table__detail-btn {
+    margin-top: var(--spacing-sm);
+  }
+}

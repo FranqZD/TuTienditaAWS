@@ -30,4 +30,17 @@ const checkout = async (req, res) => {
   }
 };
 
-module.exports = { checkout };
+/**
+ * GET /api/orders — List all orders from Tabla_Ordenes
+ */
+const getOrders = async (req, res) => {
+  try {
+    const orders = await orderService.getAllOrders();
+    return res.status(200).json(orders);
+  } catch (err) {
+    console.error('Error al obtener las órdenes:', err);
+    return res.status(500).json({ error: 'Error al obtener las órdenes' });
+  }
+};
+
+module.exports = { checkout, getOrders };

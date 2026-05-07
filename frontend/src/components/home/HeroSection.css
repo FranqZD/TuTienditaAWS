@@ -1,0 +1,83 @@
+/* ==========================================================================
+   HeroSection — Sección principal de bienvenida
+   ========================================================================== */
+
+.hero {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #2a5298 60%, var(--color-accent) 100%);
+  padding: var(--spacing-xl) var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+}
+
+.hero__content {
+  max-width: 640px;
+  text-align: center;
+}
+
+.hero__title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.2;
+}
+
+.hero__description {
+  font-size: var(--font-size-lg);
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.hero__cta {
+  display: inline-block;
+  background-color: var(--color-accent);
+  color: #ffffff;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hero__cta:hover {
+  background-color: #238b7e;
+  transform: translateY(-2px);
+}
+
+.hero__cta:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Responsive — Tablet y Desktop
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 4rem var(--spacing-xl);
+    min-height: 420px;
+  }
+
+  .hero__title {
+    font-size: 2.5rem;
+  }
+
+  .hero__description {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 5rem var(--spacing-xl);
+    min-height: 480px;
+  }
+
+  .hero__title {
+    font-size: 3rem;
+  }
+}

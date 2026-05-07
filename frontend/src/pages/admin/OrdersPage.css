@@ -1,0 +1,9 @@
+.orders-page {
+  padding: var(--spacing-xl);
+}
+
+.orders-page__title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+}
